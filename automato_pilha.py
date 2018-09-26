@@ -8,23 +8,23 @@ def first_validations(word, config):
             return -3
     
     # Verifica se valor de epsilon não pertence ao alfabeto de entrada ou da pilha
-    if (config[3][0] in config[1] or config[3][0] in config[2]):
+    if (config[3][0] in valide_value or config[3][0] in config[2]):
         print ("-4: Epsilon inválido")
         return -4
 
-    return word
+    return 0
 
 def machine(config, word, transitions):
     # Cria fila para controle do fluxo
     q = []
     stack = []
 
-    first_validations(word, config)
+    validator = first_validations(word, config)
+
+    if ((validator == -3) | (validator == -4)): # Verificação Falhou
+        return -1
 
     stack.insert(0, config[4][0]) # Insere símbolo inicial na pilha
-
-    if (word == -1): # Valores inválidos na fita
-        return -1
     
     # Configurações da máquina
     setting = {
@@ -36,34 +36,36 @@ def machine(config, word, transitions):
     # Insere elemento no final da fila
     q.append(setting)
 
-    while True:
-        word = setting["word"]
-        
+    while True:        
         # Encontrou estado final
-        if (q[0]['current_state'] in config[7]):
-            if(len(q[0]['stack']) == 0):
-                print("teste")
-            elif (q[0]['stack'][0] == config[4][0]):
-                print ("0: Computação terminada e aceita.")
-                print (setting)
-                return 0
+        if (((q[0]['current_state'] in config[7]) | (len(q[0]['stack']) == 0)) & (len(q[0]['word']) == 0)):
+            
+            print ("0: Computação terminada e aceita.")
+            print (setting)
+            return 0
 
+        if(len(q[0]['word']) == 0):
+            q[0]['word'] = config[3][0]
+        
         # Encontra transições possíveis
         for i in range(1, len(transitions) + 1, 1):
             if ((q[0]['current_state'] == transitions[i][0]) and # Estado atual == Estado da transição
-            ((word[0] == transitions[i][1]) or (transitions[i][1] == config[3][0])) and # Letra palavra == alfabeto da transição ou alfabeto de transição == epsilon
+            ((transitions[i][1] == config[3][0]) or (q[0]['word'][0] == transitions[i][1])) and # Letra palavra == alfabeto da transição ou alfabeto de transição == epsilon
             ((q[0]['stack'][0] == transitions[i][2]) or (transitions[i][2] == config[3][0]))): # Topo fita == topo transição ou topo transição == epsilon
                 new_stack = {}
 
-                new_word = word
-                if (transitions[i][1] != config[3][0]):
-                    new_word = new_word[:1]
+                new_word = q[0]['word']
+                if ((transitions[i][1] != config[3][0]) | (new_word[0] == config[3][0])):
+                    new_word = new_word[1:]
 
                 new_stack = q[0]['stack'][:]
-                if (transitions[i][2] != config[3][0]): # Alfabeto da fita != epsilon
+                if (q[0]['stack'][0] == transitions[i][2]):
                     new_stack.pop(0)
-                    if (transitions[i][4] != config[3][0]):
-                        new_stack.insert(0, transitions[i][4])
+                elif (transitions[i][2] != config[3][0]): # Alfabeto da fita != epsilon
+                    break
+                
+                if (transitions[i][4] != config[3][0]):
+                    new_stack.insert(0, transitions[i][4])
                 
 
                 new_setting = {
@@ -81,11 +83,8 @@ def machine(config, word, transitions):
             return -1
         
 
-        print('\n-------')
-        print(setting)
         # Configura máquina para próximo estado
         setting["word"] = q[1]["word"]
         setting["current_state"] = q[1]["current_state"]
         setting["stack"] = q[1]["stack"]
         q.pop(0) # Tira estado atual da fila
-
