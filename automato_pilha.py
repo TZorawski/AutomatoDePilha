@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 def first_validations(word, config):
     valide_value = config[1]
 
@@ -44,6 +46,8 @@ def machine(config, word, transitions):
             print (setting)
             return 0
 
+        # Adiciona um ε caso a palavra esteja vazia
+        
         if(len(q[0]['word']) == 0):
             q[0]['word'] = config[3][0]
         
