@@ -48,7 +48,7 @@ def machine(config, word, transitions):
 
         # Adiciona um ε caso a palavra esteja vazia
         # Ação necessária pois a linguagem Python checa as duas cláusulas de uma operação lógica or (2ª condição do if da linha aproximadamente 56). Assim, o código apresenta erro ao tentar processar com a palavra vazia, mesmo que a transição que está sendo verificada possua um ε
-        if(len(q[0]['word']) == 0):
+        if (len(q[0]['word']) == 0):
             q[0]['word'] = config[3][0]
         
         # Encontra transições possíveis
