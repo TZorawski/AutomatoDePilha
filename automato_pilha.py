@@ -21,7 +21,7 @@ def machine(config, word, transitions):
 
     validator = first_validations(word, config)
 
-    if ((validator == -3) | (validator == -4)): # Verificação Falhou
+    if ((validator == -3) or (validator == -4)): # Verificação Falhou
         return -1
 
     stack.insert(0, config[4][0]) # Insere símbolo inicial na pilha
@@ -38,7 +38,7 @@ def machine(config, word, transitions):
 
     while True:        
         # Encontrou estado final
-        if (((q[0]['current_state'] in config[7]) | (len(q[0]['stack']) == 0)) & (len(q[0]['word']) == 0)):
+        if (((q[0]['current_state'] in config[7]) or (len(q[0]['stack']) == 0)) & (len(q[0]['word']) == 0)):
             
             print ("0: Computação terminada e aceita.")
             print (setting)
@@ -55,7 +55,7 @@ def machine(config, word, transitions):
                 new_stack = {}
 
                 new_word = q[0]['word']
-                if ((transitions[i][1] != config[3][0]) | (new_word[0] == config[3][0])):
+                if ((transitions[i][1] != config[3][0]) or (new_word[0] == config[3][0])):
                     new_word = new_word[1:]
 
                 new_stack = q[0]['stack'][:]
@@ -81,7 +81,6 @@ def machine(config, word, transitions):
             print ("-1: Computação terminada e rejeitada.")
             print (setting)
             return -1
-        
 
         # Configura máquina para próximo estado
         setting["word"] = q[1]["word"]
