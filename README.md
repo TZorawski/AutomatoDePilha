@@ -23,6 +23,16 @@ Se uma transição for aprovada como possível caminho a ser tomado, são realiz
 Após realizar as alterações adiciona-se na fila de execução e depois de verificar todas as transições para o estado atual, ele é tirado da fila, e logo em seguida é executado o próximo elemento da fila com sua própria configuração e assim o processo se repete.
 
 Para verificar se a computação foi aceita o tamanho da palavra deve ser 0 e (ou foi atingido algum estado de aceitação/final ou a pilha está vazia).
+
+### Variáveis *config = {}*
+Durante a execução do programa foi armazenado a configuração do autômato na variável *config*, em que as informações estão armazenadas da seguinte forma:
+config\[1]: alfabeto de entrada
+config\[2]: alfabeto da pilha
+config\[3]: símbolo a ser considerado para representar epsilon ou lambda (não deve pertencer ao alfabeto de entrada ou da pilha)
+config\[4]: simbolo inicial da pilha (padrão: Z)
+config\[5]: conjunto de estados
+config\[6]: estado inicial
+config\[7]: conjunto de estados de aceitação
 	
 ### Como executar
 
