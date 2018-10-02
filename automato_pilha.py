@@ -49,13 +49,13 @@ def machine(config, word, transitions):
         # Encontra transições possíveis
         for i in range(1, len(transitions) + 1, 1):
             if ((q[0]['current_state'] == transitions[i][0]) and # Estado atual == Estado da transição
-            ((transitions[i][2] == config[3][0]) or ((len(q[0]['stack']) != 0) and (q[0]['stack'][0] == transitions[i][2]))) and # Topo fita == topo transição (se existir topo) ou topo transição == ε
-            ((transitions[i][1] == config[3][0]) or ((len(q[0]['word']) != 0) and (q[0]['word'][0] == transitions[i][1])))): # Primeira letra da palavra == primeira letra da transição (se existir primeira letra) ou letra da transição == ε
+            ((transitions[i][1] == config[3][0]) or ((len(q[0]['word']) != 0) and (q[0]['word'][0] == transitions[i][1]))) and # Primeira letra da palavra == primeira letra da transição (se existir primeira letra) ou letra da transição == ε
+            ((transitions[i][2] == config[3][0]) or ((len(q[0]['stack']) != 0) and (q[0]['stack'][0] == transitions[i][2])))): # Topo pilha == topo transição (se existir topo) ou topo transição == ε
                 
                 new_stack = {}
 
                 new_word = q[0]['word']
-                if ((transitions[i][1] != config[3][0])): # Letra da transição != ε, tira 1ª letra da palavra
+                if (transitions[i][1] != config[3][0]): # Letra da transição != ε, tira 1ª letra da palavra
                     new_word = new_word[1:]
 
                 new_stack = q[0]['stack'][:]
@@ -64,7 +64,6 @@ def machine(config, word, transitions):
                 
                 if (transitions[i][4] != config[3][0]): # Alfabeto de adição à pilha (transição) != ε, adiciona no topo da pilha
                     new_stack.insert(0, transitions[i][4])
-                
 
                 new_setting = {
                     "word": new_word,
