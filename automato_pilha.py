@@ -45,30 +45,24 @@ def machine(config, word, transitions):
             print ("0: Computação terminada e aceita.")
             print (setting)
             return 0
-
-        # Adiciona um ε caso a palavra esteja vazia
-        # Ação necessária pois a linguagem Python checa as duas cláusulas de uma operação lógica or (2ª condição do if da linha aproximadamente 56). Assim, o código apresenta erro ao tentar processar com a palavra vazia, mesmo que a transição que está sendo verificada possua um ε
-        if (len(q[0]['word']) == 0):
-            q[0]['word'] = config[3][0]
         
         # Encontra transições possíveis
         for i in range(1, len(transitions) + 1, 1):
             if ((q[0]['current_state'] == transitions[i][0]) and # Estado atual == Estado da transição
-            ((transitions[i][1] == config[3][0]) or (q[0]['word'][0] == transitions[i][1])) and # Letra palavra == alfabeto da transição ou alfabeto de transição == epsilon
-            ((q[0]['stack'][0] == transitions[i][2]) or (transitions[i][2] == config[3][0]))): # Topo fita == topo transição ou topo transição == epsilon
+            ((transitions[i][2] == config[3][0]) or ((len(q[0]['stack']) != 0) and (q[0]['stack'][0] == transitions[i][2]))) and # Topo fita == topo transição (se existir topo) ou topo transição == ε
+            ((transitions[i][1] == config[3][0]) or ((len(q[0]['word']) != 0) and (q[0]['word'][0] == transitions[i][1])))): # Primeira letra da palavra == primeira letra da transição (se existir primeira letra) ou letra da transição == ε
+                
                 new_stack = {}
 
                 new_word = q[0]['word']
-                if ((transitions[i][1] != config[3][0]) or (new_word[0] == config[3][0])):
+                if ((transitions[i][1] != config[3][0])): # Letra da transição != ε, tira 1ª letra da palavra
                     new_word = new_word[1:]
 
                 new_stack = q[0]['stack'][:]
-                if (q[0]['stack'][0] == transitions[i][2]):
+                if (transitions[i][2] != config[3][0]): # Alfabeto do topo da pilha (transição) != ε, tira o topo da pilha
                     new_stack.pop(0)
-                elif (transitions[i][2] != config[3][0]): # Alfabeto da fita != epsilon
-                    break
                 
-                if (transitions[i][4] != config[3][0]):
+                if (transitions[i][4] != config[3][0]): # Alfabeto de adição à pilha (transição) != ε, adiciona no topo da pilha
                     new_stack.insert(0, transitions[i][4])
                 
 
