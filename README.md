@@ -7,8 +7,24 @@ O programa foi desenvolvido por Vitor Bueno, Thaís Zorawski, Cláudia Sampedro 
 ### Sobre o Autômato de Pilha
 Um *Autômato de Pilha* é um modelo teórico parecido com o funcionameto de máquinas de Turing. Uma MT é uma máquina que manipula símbolos em uma fita, de acordo com um conjunto de regras e transições. Assim como uma máquina de Turing, um Autômato de Pilha possui um alfabeto, que será o conjunto de símbolos aceitáveis pelo autômato, um conjunto de estados possíveis, uma palavra de entrada, uma pilha e um conjunto de transições que indicam o que acontecerá com a autômato e com a pilha de acordo com o valor que é lido na entrada do autômato.
 
-### Execução do programa
-- Este programa é uma adaptação de um programa que foi desenvolvido anteriormente pelos mesmos alunos e está disponível [neste link](https://github.com/claudiaps/TuringMachine). Sendo assim, este programa está dividido em dois arquivos: ***main.py*** e ***automato_pilha.py***. O arquivo *main.py* é responsável por ler o arquivo texto que contém o autômato, ler a palavra de entrada e chamar a execução do arquivo *automato_pilha.py* que contém toda a lógica de funcionamento de um Autômato de Pilha. ***Falar sobre a implementação...***
+### Sobre o funcionamento do programa
+Este programa segue a mesma lógica da Máquina de Turing desenvolvida anteriormente pelos mesmos alunos, que está disponível [neste link](https://github.com/claudiaps/TuringMachine). Antes de começar a fazer a abordagem lógica do autômato, é verificado se na palavra inserida existe algum caractere inválido (fora do alfabeto de entrada) e se o caractere que representa o ε é válido (não está sendo usado no alfabeto de entrada ou no alfabeto de trabalho). Após essas verificações, adiciona-se o simbolo inicial na pilha e é criada a configuração atual do autômato, contendo seu estado atual, a palavra de entrada e a pilha. Assim, essa configuração inicial é adicionada na pilha de execução e procura numa lista de transições os caminhos que são possíveis tomar. Para cada possibilidade, portanto, é adicionado o resultado dessa possível transição na fila (buscando de forma linear, e *não* por profundidade). Para uma transição ser considerada um possível caminho, é necessário cumprir 3 requisitos:
+
+- o estado atual da configuração atual deve ser a mesma que na transição (*transitions\[i]\[0]*).
+- a 1ª letra da palavra de entrada da configuração atual deve ser o mesmo símbolo do alfabeto de entrada da transição (*transitions\[i]\[1]*), \[se houver 1ª letra na palavra na configuração atual] ou se o símbolo do alfabeto de entrada da transição for um ε.
+- o topo da da configuração atual deve ser o mesmo símbolo do alfabeto da da transição (*transitions\[i]\[2]*), \[se houver um símbolo no topo da pilha na configuração atual] ou se o símbolo do alfabeto da pilha da transição for um ε.
+
+Se uma transição for aprovada como possível caminho a ser tomado, são realizadas a cópia da configuração atual e a alteração das seguintes propriedades:
+- se o alfabeto de entrada da transição for diferente de ε, é realizada a consumição da 1ª letra da palavra;
+- se o símbolo do alfabeto da pilha da transição for diferente de ε, é realizada a consumição do topo da pilha;
+- se o novo símbolo do alfabeto da pilha da transição for diferente de ε, adiciona no topo da pilha o símbolo;
+- mudamos o estado atual para o novo estado atual da transição.
+
+Após realizar as alterações adiciona-se na fila de execução e depois de verificar todas as transições para o estado atual, ele é tirado da fila, e logo em seguida é executado o próximo elemento da fila com sua própria configuração e assim o processo se repete.
+
+Para verificar se a computação foi aceita o tamanho da palavra deve ser 0 e (ou foi atingido algum estado de aceitação/final ou a pilha está vazia).
+	
+### Como executar
 
 - O formato de instrução para execução do programa é:  
 	    `python main.py “automato.txt” “entrada”`
